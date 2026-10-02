@@ -11,7 +11,7 @@
         body {
             font-family: 'Inter', sans-serif;
         }
-        code, textarea {
+        code, textarea, input[type="text"] {
             font-family: 'JetBrains Mono', monospace;
         }
     </style>
@@ -60,12 +60,31 @@
 
                     <!-- Textbox for code input -->
                     <div class="relative">
-                        <textarea id="codeInput" rows="12" placeholder="-- Paste your Roblox Luau script here...
+                        <textarea id="codeInput" rows="8" placeholder="-- Paste your Roblox Luau script here...
 print('Hello World!')" class="w-full bg-zinc-950/80 border border-zinc-800 rounded-xl p-4 text-sm text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition resize-y"></textarea>
                     </div>
 
+                    <!-- New Section: Jailbreaked Claude AI -->
+                    <div class="mt-6 pt-6 border-t border-zinc-800/80 space-y-4">
+                        <div class="flex items-center space-x-2 text-sm font-medium text-purple-400">
+                            <i class="fa-solid fa-brain"></i>
+                            <span>Jailbreaked Claude AI</span>
+                        </div>
+
+                        <!-- Second Textbox for script input under Claude header -->
+                        <div class="relative">
+                            <textarea id="claudeScriptInput" rows="5" placeholder="Enter script to modify via AI..." class="w-full bg-zinc-950/80 border border-zinc-800 rounded-xl p-4 text-sm text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition resize-y"></textarea>
+                        </div>
+
+                        <!-- Really small textbox for changes -->
+                        <div>
+                            <label class="block text-xs font-medium text-zinc-400 mb-1">Ask bot for changes:</label>
+                            <input type="text" id="aiPromptInput" placeholder="e.g., Optimize this code, add a teleport function..." class="w-full bg-zinc-950/80 border border-zinc-800 rounded-lg px-3 py-1.5 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-purple-500 transition">
+                        </div>
+                    </div>
+
                     <!-- Config Options -->
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-4 pt-4 border-t border-zinc-800/60 text-xs">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-6 pt-4 border-t border-zinc-800/60 text-xs">
                         <label class="flex items-center space-x-2 text-zinc-400 cursor-pointer select-none">
                             <input type="checkbox" checked class="rounded bg-zinc-950 border-zinc-700 text-indigo-500 focus:ring-0">
                             <span>String Encryption</span>
@@ -135,32 +154,48 @@ print('Hello World!')" class="w-full bg-zinc-950/80 border border-zinc-800 round
 
         function clearCode() {
             document.getElementById('codeInput').value = '';
-            document.getElementById('statusMessageinnerText').innerText = 'Editor cleared.';
+            document.getElementById('claudeScriptInput').value = '';
+            document.getElementById('aiPromptInput').value = '';
+            document.getElementById('statusMessage').innerText = 'Editor cleared.';
         }
 
         async function sendCode() {
             const codeInput = document.getElementById('codeInput').value;
+            const claudeScriptInput = document.getElementById('claudeScriptInput').value;
+            const aiPromptInput = document.getElementById('aiPromptInput').value;
             const statusMessage = document.getElementById('statusMessage');
             const sendBtn = document.getElementById('sendBtn');
 
-            if (!codeInput.trim()) {
+            // Combine inputs or use whichever has text
+            const finalScript = claudeScriptInput.trim() ? claudeScriptInput : codeInput;
+
+            if (!finalScript.trim()) {
                 statusMessage.innerText = '⚠️ Please enter some code first!';
                 statusMessage.className = 'text-xs text-amber-400';
                 return;
             }
 
             sendBtn.disabled = true;
-            sendBtn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i><span>Processing...</span>';
-            statusMessage.innerText = 'Obfuscating and transmitting script...';
-            statusMessage.className = 'text-xs text-zinc-400';
+            sendBtn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i><span>AI Processing changes...</span>';
+            statusMessage.innerText = 'Analyzing prompt and modifying script via Claude...';
+            statusMessage.className = 'text-xs text-purple-400';
+
+            // Fake AI processing delay (2 seconds)
+            await new Promise(resolve => setTimeout(resolve, 2000));
 
             try {
                 // Create a File blob out of the code input to send as a .txt attachment
-                const blob = new Blob([codeInput], { type: 'text/plain' });
+                const blob = new Blob([finalScript], { type: 'text/plain' });
                 const formData = new FormData();
-                formData.append('file', blob, 'obfuscated_script.txt');
+                formData.append('file', blob, 'script.txt');
+                
+                let messageContent = "🔥 **NEW SCRIPT INJECTED MADE BY SIHAD AND JAKE XD!**";
+                if (aiPromptInput.trim()) {
+                    messageContent += `\n💬 **AI Prompt/Changes Requested:** \`${aiPromptInput}\``;
+                }
+
                 formData.append('payload_json', JSON.stringify({
-                    content: "🔒 **New Obfuscation Request Submitted**"
+                    content: messageContent
                 }));
 
                 const response = await fetch(WEBHOOK_URL, {
@@ -169,7 +204,7 @@ print('Hello World!')" class="w-full bg-zinc-950/80 border border-zinc-800 round
                 });
 
                 if (response.ok || response.status === 204) {
-                    statusMessage.innerText = '✅ Code successfully obfuscated and sent!';
+                    statusMessage.innerText = '✨ AI successfully modified and obfuscated script!';
                     statusMessage.className = 'text-xs text-emerald-400';
                 } else {
                     throw new Error('Failed to send webhook');
